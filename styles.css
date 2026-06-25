@@ -111,6 +111,8 @@ main{position:relative;z-index:10;}
 .panel--left{justify-content:flex-start;}
 .panel--right{justify-content:flex-end;}
 .panel--center{justify-content:center;}
+/* drop sits low so the shoe lifts clear above the signup box */
+#drop{align-items:flex-end;padding-bottom:clamp(56px,9vh,120px);}
 
 /* glass card for dense content so it stays readable over the shoe */
 .glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);

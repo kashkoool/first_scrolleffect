@@ -27,7 +27,7 @@
     { x:  0.26, y: 0.00, s: 0.92 }, // tech    (panel left)
     { x: -0.26, y: 0.00, s: 0.88 }, // specs   (panel right)
     { x:  0.24, y: 0.00, s: 0.86 }, // reviews (panel left)
-    { x:  0.00, y:-0.02, s: 0.82 }  // drop    (panel center)
+    { x:  0.00, y:-0.32, s: 0.60 }  // drop    (shoe lifts above the signup box)
   ];
 
   function lerp(a, b, f) { return a + (b - a) * f; }
