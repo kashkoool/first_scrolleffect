@@ -2,439 +2,234 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VANTA — AERO·9</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<title>VANTA AERO·9 — Engineered running shoe | VANTA</title>
+<meta name="description" content="The VANTA AERO·9: 218g of nitrogen-foam propulsion with a full-length carbon plate and 86% energy return. Four colorways. Pre-order now, ships Q3 2026." />
+<meta name="theme-color" content="#060607" />
+<link rel="canonical" href="https://first-scrolleffect.vercel.app/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060607'/%3E%3Cpath d='M7 9 L16 23 L25 9' fill='none' stroke='%23FF5A1F' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+<meta property="og:type" content="product" />
+<meta property="og:title" content="VANTA AERO·9 — Engineered running shoe" />
+<meta property="og:description" content="218g. Carbon-plated. 86% energy return. Pre-order the AERO·9 — ships Q3 2026." />
+<meta property="og:image" content="https://first-scrolleffect.vercel.app/assets/frames/ezgif-frame-020.jpg" />
+<meta property="og:url" content="https://first-scrolleffect.vercel.app/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="VANTA AERO·9 — Engineered running shoe" />
+<meta name="twitter:description" content="218g. Carbon-plated. 86% energy return. Pre-order — ships Q3 2026." />
+<meta name="twitter:image" content="https://first-scrolleffect.vercel.app/assets/frames/ezgif-frame-020.jpg" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-<style>
-  :root{
-    --bg:#0a0a0b;
-    --bg2:#101013;
-    --fg:#f4f3ef;
-    --muted:#86868c;
-    --line:rgba(255,255,255,0.10);
-    --accent:#ff4d1c;
-    --font-display:"Anton",sans-serif;
-    --font-ui:"Archivo",sans-serif;
-    --font-mono:"Space Mono",monospace;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:#000;
-    color:var(--fg);
-    font-family:var(--font-ui);
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit;text-decoration:none;}
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
 
-  /* ---- 3D canvas (fixed behind content) ---- */
-  #scene{
-    position:fixed;
-    inset:0;
-    width:100vw;height:100vh;
-    z-index:1;
-    display:block;
-  }
-  #stage{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    background:#000;
-  }
-  /* ghost wordmark hidden in image-sequence mode (opaque frames) */
-  #ghost{display:none;}
-  #ghost span{
-    font-family:var(--font-display);
-    font-size:34vw;line-height:1;letter-spacing:.02em;
-    color:rgba(255,255,255,.035);
-    white-space:nowrap;text-transform:uppercase;
-    transform:translateY(-4%);
-  }
-  /* grain + vignette overlay */
-  #grain{
-    position:fixed;inset:0;z-index:2;pointer-events:none;
-    opacity:.5;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  #vignette{
-    position:fixed;inset:0;z-index:2;pointer-events:none;
-    background:radial-gradient(120% 100% at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%);
-  }
-
-  /* ---- top nav ---- */
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:30;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:22px clamp(20px,4vw,52px);
-    mix-blend-mode:difference;
-  }
-  .brand{
-    font-family:var(--font-display);
-    font-size:24px;letter-spacing:.14em;line-height:1;
-  }
-  .nav-links{display:flex;gap:clamp(16px,2.4vw,40px);}
-  .nav-links a{
-    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-    font-weight:600;opacity:.8;
-  }
-  .nav-links a:hover{opacity:1;}
-
-  /* ---- HUD readout ---- */
-  .hud{
-    position:fixed;left:clamp(20px,4vw,52px);bottom:26px;z-index:30;
-    font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;
-    color:var(--muted);line-height:1.8;mix-blend-mode:difference;
-  }
-  .hud b{color:var(--fg);font-weight:700;}
-
-  /* ---- scroll content ---- */
-  main{position:relative;z-index:10;}
-  .panel{
-    min-height:100vh;
-    display:flex;align-items:center;
-    padding:0 clamp(20px,6vw,120px);
-    pointer-events:none;
-  }
-  .panel .inner{pointer-events:auto;will-change:transform,opacity;}
-
-  /* hero */
-  .hero{justify-content:flex-start;align-items:flex-end;padding-bottom:clamp(96px,14vh,150px);}
-  .hero .kicker{
-    font-family:var(--font-mono);font-size:12px;letter-spacing:.34em;
-    text-transform:uppercase;color:var(--accent);margin-bottom:16px;
-  }
-  .hero h1{
-    font-family:var(--font-display);
-    font-size:clamp(64px,13vw,170px);
-    line-height:.82;letter-spacing:.01em;
-    text-transform:uppercase;
-  }
-  .hero h1 .o{color:var(--accent);}
-  .hero .sub{
-    margin-top:22px;max-width:30ch;
-    font-size:clamp(15px,1.5vw,20px);color:#cfcfca;font-weight:500;
-    line-height:1.5;
-  }
-  .scrollcue{
-    position:fixed;right:clamp(20px,4vw,52px);bottom:26px;z-index:30;
-    display:flex;align-items:center;gap:12px;
-    font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--muted);mix-blend-mode:difference;
-  }
-  .scrollcue .bar{width:46px;height:1px;background:currentColor;position:relative;overflow:hidden;}
-  .scrollcue .bar::after{content:"";position:absolute;inset:0;left:-100%;background:var(--fg);animation:sweep 2.2s infinite;}
-  @keyframes sweep{0%{transform:translateX(0)}100%{transform:translateX(200%)}}
-
-  /* generic big statement panels */
-  .statement{justify-content:center;text-align:center;}
-  .statement h2{
-    font-family:var(--font-display);
-    font-size:clamp(54px,11vw,170px);line-height:.86;
-    text-transform:uppercase;letter-spacing:.01em;
-  }
-  .statement p{
-    margin-top:20px;max-width:46ch;margin-inline:auto;
-    color:#bdbdb8;font-size:clamp(14px,1.4vw,18px);line-height:1.6;font-weight:500;
-  }
-  .statement .label{
-    font-family:var(--font-mono);font-size:12px;letter-spacing:.3em;
-    text-transform:uppercase;color:var(--accent);margin-bottom:20px;
-  }
-
-  /* specs */
-  .specs{justify-content:flex-end;}
-  .specs .inner{width:min(560px,100%);}
-  .specs .label{
-    font-family:var(--font-mono);font-size:12px;letter-spacing:.3em;
-    text-transform:uppercase;color:var(--accent);margin-bottom:26px;
-  }
-  .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
-  .spec{background:rgba(10,10,12,.55);backdrop-filter:blur(6px);padding:26px 24px;}
-  .spec .v{font-family:var(--font-display);font-size:48px;line-height:1;}
-  .spec .v small{font-family:var(--font-ui);font-size:16px;font-weight:700;color:var(--muted);margin-left:4px;}
-  .spec .k{margin-top:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-
-  /* colorways */
-  .colorways{justify-content:center;text-align:center;}
-  .colorways .label{
-    font-family:var(--font-mono);font-size:12px;letter-spacing:.3em;
-    text-transform:uppercase;color:var(--accent);margin-bottom:18px;
-  }
-  .colorways h2{font-family:var(--font-display);font-size:clamp(40px,7vw,96px);text-transform:uppercase;line-height:.9;}
-  .cw-name{margin-top:14px;font-family:var(--font-mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#cfcfca;height:18px;}
-  .swatches{display:flex;gap:14px;justify-content:center;margin-top:30px;}
-  .sw{
-    width:46px;height:46px;border-radius:50%;cursor:pointer;
-    border:2px solid rgba(255,255,255,.18);
-    position:relative;transition:transform .25s ease,border-color .25s ease;
-    background-clip:padding-box;
-  }
-  .sw:hover{transform:translateY(-3px);}
-  .sw[aria-pressed="true"]{border-color:var(--fg);transform:translateY(-3px);}
-  .sw[aria-pressed="true"]::after{
-    content:"";position:absolute;inset:-7px;border:1px solid rgba(255,255,255,.35);border-radius:50%;
-  }
-
-  /* CTA */
-  .cta{justify-content:center;text-align:center;}
-  .cta h2{font-family:var(--font-display);font-size:clamp(60px,13vw,200px);text-transform:uppercase;line-height:.84;}
-  .cta .price{margin-top:8px;font-family:var(--font-mono);font-size:15px;letter-spacing:.2em;color:var(--muted);}
-  .btn{
-    display:inline-flex;align-items:center;gap:14px;margin-top:34px;
-    background:var(--accent);color:#0a0a0b;
-    font-family:var(--font-ui);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;
-    padding:18px 34px;border:none;border-radius:2px;cursor:pointer;
-    transition:transform .18s ease,filter .18s ease;
-  }
-  .btn:hover{filter:brightness(1.08);}
-  .btn:active{transform:scale(.97);}
-  .btn .arr{font-size:18px;}
-
-  footer{
-    position:relative;z-index:10;
-    border-top:1px solid var(--line);
-    display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
-    padding:28px clamp(20px,6vw,120px);
-    font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--muted);
-    background:var(--bg);
-  }
-
-  .nogl{
-    position:fixed;inset:0;z-index:40;display:none;
-    align-items:center;justify-content:center;text-align:center;
-    font-family:var(--font-mono);color:var(--muted);padding:40px;
-  }
-
-  @media(max-width:680px){
-    .nav-links{display:none;}
-    .specs{justify-content:center;}
-  }
-</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "VANTA AERO·9",
+  "image": "https://first-scrolleffect.vercel.app/assets/frames/ezgif-frame-020.jpg",
+  "description": "Nitrogen-foam running shoe with a full-length carbon plate, 86% energy return and a 218g racing weight.",
+  "brand": { "@type": "Brand", "name": "VANTA" },
+  "sku": "VNT-AERO9",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://first-scrolleffect.vercel.app/",
+    "priceCurrency": "USD",
+    "price": "185.00",
+    "availability": "https://schema.org/PreOrder",
+    "priceValidUntil": "2026-12-31"
+  },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "1240" }
+}
+</script>
 </head>
 <body>
-  <div id="stage"></div>
-  <div id="ghost"><span>AERO·9</span></div>
-  <canvas id="scene"></canvas>
-  <div id="grain"></div>
-  <div id="vignette"></div>
+<a class="skip" href="#buy">Skip to purchase</a>
 
-  <nav>
-    <div class="brand">VANTA</div>
-    <div class="nav-links">
-      <a href="#craft">Craft</a>
-      <a href="#specs">Specs</a>
-      <a href="#colorways">Colorways</a>
-      <a href="#order">Order</a>
-    </div>
+<!-- ====== FIXED 3D STAGE (the shoe lives here, behind everything) ====== -->
+<canvas id="seq" class="stage" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <span class="loader__label">Loading the AERO·9</span>
+  <span class="loader__track"><i id="loaderBar"></i></span>
+  <span class="loader__pct" id="loaderPct">0%</span>
+</div>
+
+<!-- persistent HUD -->
+<div class="hud" aria-hidden="true">
+  <span>FRAME <b id="hudFrame">001/151</b></span>
+  <span>MODEL <b>AERO·9</b></span>
+  <span>WEIGHT <b>218 G</b></span>
+</div>
+<p class="scrollcue" id="scrollcue" aria-hidden="true">Scroll to rotate</p>
+
+<header class="nav" id="nav" data-elevated="false">
+  <a class="nav__brand" href="#top" aria-label="VANTA home">VANTA</a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#tech">Technology</a>
+    <a href="#specs">Specs</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#drop">The drop</a>
   </nav>
+  <button class="nav__cart" id="cartBtn" type="button" aria-label="Cart">
+    Bag <span class="nav__count" id="cartCount" aria-live="polite">0</span>
+  </button>
+</header>
 
-  <div class="hud">
-    FRAME <b id="hud-deg">001/151</b><br/>
-    MODEL <b>AERO·9</b><br/>
-    SOURCE <b id="hud-fps">151F SEQ</b>
-  </div>
+<main id="top">
 
-  <div class="scrollcue">SCROLL TO EXPLORE <span class="bar"></span></div>
-
-  <main>
-    <section class="panel hero" id="top">
-      <div class="inner">
-        <div class="kicker">VANTA // AERO·9 — Series 03</div>
-        <h1>AER<span class="o">O</span>·9</h1>
-        <p class="sub">A 151-frame product render, scrubbed by your scroll — it arrives, tumbles, and travels the page, shifting colorway with every section.</p>
+  <!-- HERO -->
+  <section class="panel panel--left" aria-label="AERO·9">
+    <div class="inner inner--wide">
+      <p class="eyebrow"><span class="eyebrow__tick"></span>VANTA · Series 03 · Pre-order</p>
+      <h1 class="hero__title">AER<span class="accent">O</span>·9</h1>
+      <p class="lede">A 218-gram racing shoe you can turn in your hand. Scroll to rotate it through every angle — then build your pair.</p>
+      <div class="hero__stats">
+        <span><b>218</b>g race weight</span>
+        <span><b>86</b>% energy return</span>
+        <span><b>$185</b> ships Q3</span>
       </div>
-    </section>
+      <a class="btn btn--primary" href="#buy">Build your pair</a>
+    </div>
+  </section>
 
-    <section class="panel statement" id="craft">
-      <div class="inner">
-        <div class="label">// Image sequence, reimagined</div>
-        <h2>360°<br/>of craft</h2>
-        <p>The classic image-sequence gesture: the same scroll that scrubs a thousand product photos, here driving 151 hand-rendered frames — every angle crisp, recolorable in a tap.</p>
+  <!-- BUY -->
+  <section class="panel panel--right" id="buy" aria-label="Buy the AERO·9">
+    <div class="inner glass">
+      <p class="eyebrow"><span class="eyebrow__tick"></span>Pre-order · ships Q3 2026</p>
+      <h2 class="panel__name">AERO·9</h2>
+      <div class="rate">
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <span class="rate__t">4.8 · <a href="#reviews">1,240 reviews</a></span>
       </div>
-    </section>
+      <p class="price"><span id="priceVal">$185</span> <small>USD</small></p>
 
-    <section class="panel specs" id="specs">
-      <div class="inner">
-        <div class="label">// Technical readout</div>
-        <div class="spec-grid">
-          <div class="spec"><div class="v">218<small>g</small></div><div class="k">Per shoe</div></div>
-          <div class="spec"><div class="v">8<small>mm</small></div><div class="k">Heel-to-toe drop</div></div>
-          <div class="spec"><div class="v">86<small>%</small></div><div class="k">Energy return</div></div>
-          <div class="spec"><div class="v">03</div><div class="k">Density-zone foam</div></div>
+      <div class="opt">
+        <p class="opt__label">Colorway — <span id="cwName">Infrared</span></p>
+        <div class="swatches" id="swatches" role="radiogroup" aria-label="Colorway"></div>
+      </div>
+
+      <div class="opt">
+        <p class="opt__label">Size <span class="opt__hint">US · <a href="#specs">size guide</a></span></p>
+        <div class="sizes" id="sizes" role="radiogroup" aria-label="Size"></div>
+      </div>
+
+      <div class="actions">
+        <div class="qty" aria-label="Quantity">
+          <button type="button" class="qty__btn" id="qtyMinus" aria-label="Decrease quantity">−</button>
+          <span class="qty__n" id="qtyN" aria-live="polite">1</span>
+          <button type="button" class="qty__btn" id="qtyPlus" aria-label="Increase quantity">+</button>
         </div>
+        <button type="button" class="btn btn--primary" id="addBtn">Add to bag — <span id="addPrice">$185</span></button>
       </div>
-    </section>
 
-    <section class="panel colorways" id="colorways">
-      <div class="inner">
-        <div class="label">// Select your colorway</div>
-        <h2>Four ways<br/>to move</h2>
-        <div class="cw-name" id="cw-name">INFRARED</div>
-        <div class="swatches" id="swatches"></div>
-      </div>
-    </section>
+      <ul class="trust">
+        <li>Free carbon-neutral shipping</li>
+        <li>30-day test runs, free returns</li>
+        <li>2-year midsole warranty</li>
+      </ul>
+    </div>
+  </section>
 
-    <section class="panel cta" id="order">
-      <div class="inner">
-        <h2>Take a<br/>step.</h2>
-        <div class="price">AERO·9 — $185 · ships Q3</div>
-        <button class="btn">Pre-order <span class="arr">→</span></button>
-      </div>
-    </section>
-  </main>
+  <!-- TECH -->
+  <section class="panel panel--left" id="tech" aria-label="Technology">
+    <div class="inner glass">
+      <p class="eyebrow"><span class="eyebrow__tick"></span>What's inside</p>
+      <h2 class="panel__h">Built to give the road back to you.</h2>
+      <ol class="feats">
+        <li><p class="feats__k">01 — Foam</p><p class="feats__t">Nitrogen-infused midsole</p>
+          <p class="feats__d">Supercritical foam whipped with nitrogen: lighter than EVA, springier than rubber, holds its bounce past 300 km.</p></li>
+        <li><p class="feats__k">02 — Plate</p><p class="feats__t">Full-length carbon plate</p>
+          <p class="feats__d">A curved carbon spine stores your footstrike and releases it as forward roll — less effort at the same pace.</p></li>
+        <li><p class="feats__k">03 — Upper</p><p class="feats__t">Engineered seamless knit</p>
+          <p class="feats__d">One-piece woven upper with zoned support. No hot spots, no break-in, 12 g lighter than the shoe it replaces.</p></li>
+      </ol>
+    </div>
+  </section>
 
-  <footer>
-    <span>© VANTA 2026</span>
-    <span>Engineered motion</span>
-    <span>Image-sequence render</span>
-  </footer>
+  <!-- SPECS -->
+  <section class="panel panel--right" id="specs" aria-label="Specifications">
+    <div class="inner glass">
+      <p class="eyebrow"><span class="eyebrow__tick"></span>The numbers</p>
+      <h2 class="panel__h">Spec sheet</h2>
+      <dl class="specsheet">
+        <div class="row"><dt>Weight (US 9)</dt><dd>218 g / 7.7 oz</dd></div>
+        <div class="row"><dt>Stack height</dt><dd>38 / 30 mm</dd></div>
+        <div class="row"><dt>Drop</dt><dd>8 mm</dd></div>
+        <div class="row"><dt>Energy return</dt><dd>86%</dd></div>
+        <div class="row"><dt>Plate</dt><dd>Full-length carbon</dd></div>
+        <div class="row"><dt>Upper</dt><dd>Recycled knit, zoned</dd></div>
+        <div class="row"><dt>Outsole</dt><dd>4 mm abrasion lugs</dd></div>
+        <div class="row"><dt>Sizes</dt><dd>US 7–13</dd></div>
+      </dl>
+    </div>
+  </section>
 
-  <div class="nogl">Canvas unavailable — the image sequence can't render in this browser.</div>
+  <!-- REVIEWS -->
+  <section class="panel panel--left" id="reviews" aria-label="Reviews">
+    <div class="inner glass inner--reviews">
+      <p class="eyebrow"><span class="eyebrow__tick"></span>From the road</p>
+      <h2 class="panel__h">4.8 / 5 <span class="muted">· 1,240 verified runs</span></h2>
+      <blockquote class="review">
+        <p class="review__stars" aria-label="5 out of 5">★★★★★</p>
+        <p class="review__body">"Took 40 seconds off my 10k and my legs felt fresh after. The plate is real."</p>
+        <footer class="review__by">Maya R. · Marathoner</footer>
+      </blockquote>
+      <blockquote class="review">
+        <p class="review__stars" aria-label="5 out of 5">★★★★★</p>
+        <p class="review__body">"Lightest trainer I've owned that still survives daily miles. Zero break-in."</p>
+        <footer class="review__by">Devon K. · Coach</footer>
+      </blockquote>
+    </div>
+  </section>
 
-  <script>
-  (function(){
-    "use strict";
-    var canvas = document.getElementById('scene');
-    var ctx = canvas.getContext('2d');
-    var dpr = Math.min(window.devicePixelRatio||1, 2);
-    var vw, vh;
+  <!-- DROP -->
+  <section class="panel panel--center" id="drop" aria-label="The drop">
+    <div class="inner glass inner--center">
+      <h2 class="drop__title">Be first on the AERO·9 drop.</h2>
+      <p class="lede">Limited first run ships Q3 2026. Get the early-access window and your size held for 24 hours.</p>
+      <form class="drop__form" id="dropForm" novalidate>
+        <label class="visually-hidden" for="email">Email address</label>
+        <input class="drop__input" id="email" name="email" type="email" inputmode="email"
+               autocomplete="email" placeholder="you@email.com" required />
+        <button class="btn btn--primary" type="submit">Notify me</button>
+      </form>
+      <p class="drop__msg" id="dropMsg" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+</main>
 
-    // ---------- FRAMES ----------
-    var N = 151;
-    var frames = [], loaded = 0;
-    for (var i=1;i<=N;i++){
-      var im = new Image();
-      im.src = 'assets/frames/ezgif-frame-' + ('00'+i).slice(-3) + '.jpg';
-      im.onload = function(){ loaded++; };
-      frames.push(im);
-    }
+<footer class="foot">
+  <div class="foot__top">
+    <div class="foot__brandcol">
+      <p class="foot__brand">VANTA</p>
+      <p class="foot__tag">Engineered motion. Built in limited runs.</p>
+    </div>
+    <nav class="foot__col" aria-label="Shop"><p class="foot__h">Shop</p>
+      <a href="#buy">AERO·9</a><a href="#tech">Technology</a><a href="#drop">The drop</a></nav>
+    <nav class="foot__col" aria-label="Help"><p class="foot__h">Help</p>
+      <a href="#specs">Size guide</a><a href="#buy">Shipping &amp; returns</a><a href="#buy">Warranty</a></nav>
+    <nav class="foot__col" aria-label="Company"><p class="foot__h">Company</p>
+      <a href="#reviews">Reviews</a><a href="#top">About</a><a href="#drop">Contact</a></nav>
+  </div>
+  <div class="foot__bottom">
+    <span>© 2026 VANTA. Demo storefront.</span>
+    <span class="foot__pay">VISA · MC · AMEX · APPLE PAY</span>
+  </div>
+</footer>
 
-    // ---------- COLORWAYS (hue tint on the real render) ----------
-    var COLORWAYS = [
-      {id:'INFRARED', hue:0,   sat:1.00, bright:1.00, uiAccent:'#ff4d1c'},
-      {id:'VOLT',     hue:78,  sat:1.30, bright:1.05, uiAccent:'#c8f000'},
-      {id:'PHANTOM',  hue:205, sat:0.78, bright:0.96, uiAccent:'#7b8cff'},
-      {id:'ARCTIC',   hue:158, sat:1.18, bright:1.02, uiAccent:'#2b6fff'}
-    ];
-    var uiShown = -1;
-    function setUI(idx){
-      if(idx===uiShown) return;
-      uiShown = idx;
-      document.documentElement.style.setProperty('--accent', COLORWAYS[idx].uiAccent);
-      document.getElementById('cw-name').textContent = COLORWAYS[idx].id;
-      var sws = document.querySelectorAll('.sw');
-      sws.forEach(function(s,k){ s.setAttribute('aria-pressed', k===idx?'true':'false'); });
-    }
+<div class="buybar" id="buybar" data-show="false" aria-hidden="true">
+  <span class="buybar__name">AERO·9 <b id="buybarCw">Infrared</b></span>
+  <span class="buybar__price" id="buybarPrice">$185</span>
+  <button class="btn btn--primary btn--sm" id="buybarBtn" type="button">Add to bag</button>
+</div>
 
-    // ---------- POSES (one rest state per section) ----------
-    var POSES = [
-      {x: 0.24, y:-0.06, s:1.00, cw:0}, // hero    (right)
-      {x:-0.26, y:-0.04, s:1.12, cw:2}, // craft   (left, big)
-      {x:-0.26, y: 0.02, s:1.00, cw:1}, // specs   (left, text right)
-      {x: 0.28, y:-0.08, s:0.92, cw:3}, // colorways(right)
-      {x: 0.26, y: 0.04, s:0.94, cw:0}  // cta     (right)
-    ];
-    var ENTRANCE = {x:0.16, y:-0.22, s:0.5};
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    // swatches drive the colorway shown in the colorways section
-    var swWrap = document.getElementById('swatches');
-    COLORWAYS.forEach(function(cw,i){
-      var b=document.createElement('button');
-      b.className='sw'; b.type='button';
-      b.style.background = cw.id==='INFRARED'
-        ? 'linear-gradient(135deg,#ff4d1c 0 55%,#1f3a55 55% 100%)'
-        : cw.id==='VOLT' ? 'linear-gradient(135deg,#c8f000 0 55%,#16161b 55% 100%)'
-        : cw.id==='PHANTOM' ? 'linear-gradient(135deg,#7b8cff 0 55%,#16161b 55% 100%)'
-        : 'linear-gradient(135deg,#2b6fff 0 55%,#cfe0ff 55% 100%)';
-      b.setAttribute('aria-label', cw.id);
-      b.addEventListener('click', function(){ POSES[3].cw=i; uiShown=-1; });
-      swWrap.appendChild(b);
-    });
-
-    // ---------- SCROLL ----------
-    var scrollProgress = 0;
-    function updateScroll(){
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress = max>0 ? Math.min(1, Math.max(0, window.scrollY/max)) : 0;
-    }
-    window.addEventListener('scroll', updateScroll, {passive:true});
-    updateScroll();
-
-    var inners = Array.prototype.slice.call(document.querySelectorAll('.panel:not(.hero) .inner'));
-    function updatePanels(){
-      var mid = vh/2;
-      inners.forEach(function(el){
-        var r = el.getBoundingClientRect();
-        var ec = r.top + r.height/2;
-        var d = Math.abs(ec - mid)/vh;
-        el.style.opacity = Math.max(0, 1 - d*1.7).toFixed(3);
-        el.style.transform = 'translateY('+((ec-mid)*0.06).toFixed(1)+'px)';
-      });
-    }
-
-    // ---------- RESIZE ----------
-    function resize(){
-      vw = window.innerWidth; vh = window.innerHeight;
-      canvas.width = vw*dpr; canvas.height = vh*dpr;
-      canvas.style.width = vw+'px'; canvas.style.height = vh+'px';
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    function smooth(x){ return x*x*(3-2*x); }
-    function lerp(a,b,f){ return a+(b-a)*f; }
-
-    // ---------- LOOP ----------
-    var hudDeg = document.getElementById('hud-deg');
-    var start = performance.now();
-    var sp = 0;
-    var INTRO = 1.4;
-
-    function frame(now){
-      requestAnimationFrame(frame);
-      var t = (now-start)/1000;
-      sp += (scrollProgress - sp)*0.10;
-
-      var fi = Math.round(sp*(N-1));
-      var img = frames[Math.max(0,Math.min(N-1,fi))];
-
-      var n = POSES.length;
-      var seg = sp*(n-1);
-      var si = Math.min(n-2, Math.floor(seg));
-      var f = smooth(Math.min(1, Math.max(0, seg-si)));
-      var A = POSES[si], B = POSES[si+1];
-      var px=lerp(A.x,B.x,f), py=lerp(A.y,B.y,f), s=lerp(A.s,B.s,f);
-
-      var ca=COLORWAYS[A.cw], cb=COLORWAYS[B.cw];
-      var hue=lerp(ca.hue,cb.hue,f), sat=lerp(ca.sat,cb.sat,f), br=lerp(ca.bright,cb.bright,f);
-      setUI(f<0.5?A.cw:B.cw);
-
-      var intro = smooth(Math.min(1, t/INTRO));
-      px=lerp(ENTRANCE.x,px,intro); py=lerp(ENTRANCE.y,py,intro); s=lerp(ENTRANCE.s,s,intro);
-      py += Math.sin(t*0.9)*0.012*intro;
-
-      canvas.style.filter = 'hue-rotate('+hue.toFixed(1)+'deg) saturate('+sat.toFixed(2)+') brightness('+br.toFixed(2)+')';
-      canvas.style.opacity = intro.toFixed(3);
-
-      ctx.clearRect(0,0,vw,vh);
-      if (img && img.complete && img.naturalWidth){
-        var base = (vh*0.66)/img.naturalHeight * s;
-        var dw = img.naturalWidth*base, dh = img.naturalHeight*base;
-        var cx = vw*0.5 + px*vw;
-        var cy = vh*0.5 + py*vh;
-        ctx.drawImage(img, cx-dw/2, cy-dh/2, dw, dh);
-      }
-
-      updatePanels();
-      hudDeg.textContent = ('00'+(fi+1)).slice(-3)+'/'+N;
-    }
-    requestAnimationFrame(frame);
-  })();
-  </script>
+<script src="app.js" defer></script>
 </body>
 </html>
