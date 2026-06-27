@@ -238,16 +238,36 @@ main{position:relative;z-index:10;}
    ============================================================ */
 @media(max-width:900px){
   .nav__links{display:none;}
-  .panel{padding:110px var(--pad) 90px;}
   .panel--left,.panel--right{justify-content:center;}
   .panel .inner,.inner--wide{width:100%;}
   .foot__top{grid-template-columns:1fr 1fr;gap:28px;}
+  /* heavier glass so copy stays readable over the shoe */
+  .glass{background:rgba(6,7,9,.82);}
+}
+
+/* ---- phones: shoe pinned to a top band, content drops to the bottom ---- */
+@media(max-width:760px){
+  .panel{min-height:100svh;align-items:flex-end;padding:46vh var(--pad) 30px;}
+  .panel--left,.panel--right,.panel--center{justify-content:center;}
+  .panel .inner,.inner--wide,.inner--center{width:100%;}
+  .glass{background:rgba(6,7,9,.86);backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);border-color:rgba(236,236,230,.16);}
+  #drop{padding-bottom:30px;}
+  .hero__title{font-size:clamp(72px,23vw,150px);}
+  .hero__stats{gap:14px 20px;margin:18px 0 22px;}
+  .lede{font-size:16px;}
+  .panel__name{font-size:clamp(40px,12vw,56px);}
+  .sizes{grid-template-columns:repeat(auto-fill,minmax(46px,1fr));}
+  .scrollcue{display:none;}
+  .hud{display:none;}
 }
 @media(max-width:560px){
   .drop__form{flex-direction:column;}
   .drop__form .btn{width:100%;}
   .foot__top{grid-template-columns:1fr;}
   .hud span:nth-child(3){display:none;}
+  .actions{flex-wrap:wrap;}
+  .actions .btn--primary{flex:1 1 100%;}
 }
 
 /* ============================================================

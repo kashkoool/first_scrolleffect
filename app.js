@@ -100,7 +100,8 @@
     var A = POSES[i], B = POSES[i + 1];
     var px = lerp(A.x, B.x, f), py = lerp(A.y, B.y, f), s = lerp(A.s, B.s, f);
 
-    if (vw < 760) { px = 0; py = -0.16; s *= 0.8; }   // mobile: shoe up & centered
+    // mobile: pin the shoe to a top band so it stays visible above the content
+    if (vw < 760) { px = 0; py = -0.30; s = 0.95; }
 
     var key = idx + "|" + px.toFixed(3) + "|" + py.toFixed(3) + "|" + s.toFixed(3);
     if (key === lastKey) return;                       // nothing changed → skip draw
